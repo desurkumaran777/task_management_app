@@ -1,21 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}Sign Out Success{% endblock %}
 
 {% block content %}
 <div>
     <div class="card mx-3">
         <div class="card-header">
-            Create An Account
+            Signed Up Successfully
         </div>
         <div class="card-body col-12 row">
             <div class="col-1"></div>
             <div class="col-10">
-                <form method="post" action="{% url 'sign-up' %}">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Register</button>
-                </form>
+                Hi {{user_name}}, 
+                You have been signed up successfully. click <a href="{% url 'sign-in' %}">here</a> to sign in to you
+                account.
             </div>
             <div class="col-1"></div>
         </div>

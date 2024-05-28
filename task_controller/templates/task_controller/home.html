@@ -4,7 +4,6 @@
 
 {% block content %}
 <div>
-    {% csrf_token %}
     <div class="card mx-3">
         <div class="card-header">
             Task Management Application
@@ -12,7 +11,24 @@
         <div class="card-body col-12 row">
             <div class="col-1"></div>
             <div class="col-10">
-                Welcome to Task Management Application. Here You Can Manage Your Tasks.
+                {% if user.is_authenticated %}
+                <p>
+                    Hi {{user.username}},
+                </p>
+                {% endif %}
+                <p>
+                    Welcome to Task Management Application. Here You Can Manage Your Tasks.
+                </p>
+                {% if not user.is_authenticated %}
+                <div>
+                    <p>
+                        To Registe an Account, click <a href="{% url 'sign-up' %}">here</a>.
+                    </p>
+                    <p>
+                        If you already have an account, click <a href="{% url 'sign-in' %}">here</a> to sign in.
+                    </p>
+                </div>
+                {% endif %}
             </div>
             <div class="col-1"></div>
         </div>

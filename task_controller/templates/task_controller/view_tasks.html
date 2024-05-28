@@ -1,9 +1,53 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 
-{% block title %}Home{% endblock %}
+{% block title %}View Tasks{% endblock %}
 
 {% block content %}
 <div>
-    Welcome to View Tasks.
+    <div class="card mx-3">
+        <div class="card-header">
+            List of Tasks
+        </div>
+        <div class="card-body col-12 row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                {% if tasks|length == 0 %}
+                <div>
+                    There is No Task to Show. Click <a href="{% url 'add-task' %}">here</a> to add a task.
+                </div>
+                {% else %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">S.No</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{ task.task_title }}</td>
+                            <td class="text-truncate" style="max-width: 5rem;">
+                                {{ task.task_desc }}
+                            </td>
+                            <td>{{ priority_dict|get_data:task.task_priority }}</td>
+                            <td>{{ status_dict|get_data:task.task_status }}</td>
+                            <td>{{ task.task_status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
 </div>
 {% endblock %}

@@ -38,5 +38,6 @@ def sign_in(request):
 
 
 def sign_out(request):
+    logout(request)
     context = {}
     return render(request, 'user_accounts/sign_out_success.html', context)

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div>
+    <form method="post" action="{% url 'sign-up' %}">
+        {% csrf_token %}
+        <div class="card mx-3">
+            <div class="card-header">
+                Create An Account
+            </div>
+            <div class="card-body col-12 row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

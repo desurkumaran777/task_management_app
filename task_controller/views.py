@@ -10,7 +10,9 @@ def home(request):
 
 
 def add_task(request):
-    if request.method == "POST":
+    if request.method == "GET":
+        form = TaskForm()
+    else:
         form = TaskForm(data=request.POST)
 
         if form.is_valid():
@@ -19,8 +21,9 @@ def add_task(request):
             if task is not None:
                 task.task_user = request.user
                 task.save()
-                
-    return render(request, 'task_controller/add_task.html', context={})
+
+    context = {'form': form}    
+    return render(request, 'task_controller/add_task.html', context)
 
 
 def view_tasks(request):

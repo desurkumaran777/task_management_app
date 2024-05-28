@@ -4,6 +4,18 @@
 
 {% block content %}
 <div>
-    Welcome to Task Management Application.
+    {% csrf_token %}
+    <div class="card mx-3">
+        <div class="card-header">
+            Task Management Application
+        </div>
+        <div class="card-body col-12 row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                Welcome to Task Management Application. Here You Can Manage Your Tasks.
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
 </div>
 {% endblock %}

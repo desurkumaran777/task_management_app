@@ -3,8 +3,15 @@
 
     <ul class="nav col-md-4 justify-content-end">
         <li class="nav-item"><a href="{% url 'home' %}" class="nav-link px-2 text-body-secondary">TMA</a></li>
+        {% if user.is_authenticated %}
         <li class="nav-item"><a href="{% url 'add-task' %}" class="nav-link px-2 text-body-secondary">Add Task</a></li>
         <li class="nav-item"><a href="{% url 'view-tasks' %}" class="nav-link px-2 text-body-secondary">View Tasks</a>
         </li>
+        {% endif %}
+        {% if not user.is_authenticated %}
+        <li class="nav-item"><a href="{% url 'sign-in' %}" class="nav-link px-2 text-body-secondary">Sign In</a></li>
+        <li class="nav-item"><a href="{% url 'sign-up' %}" class="nav-link px-2 text-body-secondary">Sign Up</a>
+        </li>
+        {% endif %}
     </ul>
 </footer>

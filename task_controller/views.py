@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .forms import TaskForm
 from .models import Task
@@ -34,5 +34,55 @@ def view_tasks(request):
     priority_dict = {'H': 'High', 'M': 'Medium', 'L': 'Low'}
     status_dict = {'P': 'Pending', 'I': 'In Progress', 'C': 'Completed'}
 
-    context = {'tasks': tasks, 'priority_dict': priority_dict, 'status_dict': status_dict}
+    context = {'tasks': tasks, 'priority_dict': priority_dict,
+               'status_dict': status_dict}
     return render(request, 'task_controller/view_tasks.html', context)
+
+
+def view_task(request, task_id):
+    task = Task.objects.get(task_id=task_id)
+
+    form = TaskForm()
+    form.initial['task_title'] = task.task_title
+    form.initial['task_desc'] = task.task_desc
+    form.initial['task_priority'] = task.task_priority
+    form.initial['task_status'] = task.task_status
+
+    form.fields['task_title'].disabled = True
+    form.fields['task_desc'].disabled = True
+    form.fields['task_priority'].disabled = True
+    form.fields['task_status'].disabled = True
+
+    context = {'form': form, 'task': task}
+
+    return render(request, 'task_controller/view_task.html', context)
+
+
+def edit_task(request, task_id):
+    task = Task.objects.get(task_id=task_id)
+
+    if request.method == "GET":
+        form = TaskForm()
+        form.initial['task_title'] = task.task_title
+        form.initial['task_desc'] = task.task_desc
+        form.initial['task_priority'] = task.task_priority
+        form.initial['task_status'] = task.task_status
+
+        context = {'form': form, 'task': task}
+
+        return render(request, 'task_controller/edit_task.html', context)
+    else:
+        task.task_title = request.POST['task_title']
+        task.task_desc = request.POST['task_desc']
+        task.task_priority = request.POST['task_priority']
+        task.task_status = request.POST['task_status']
+
+        task.save()
+
+        return redirect('view-tasks')
+
+
+def delete_task(request, task_id):
+    task = Task.objects.get(task_id=task_id)
+    task.delete()
+    return redirect('view-tasks')

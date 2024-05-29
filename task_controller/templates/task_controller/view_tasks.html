@@ -38,7 +38,22 @@
                             </td>
                             <td>{{ priority_dict|get_data:task.task_priority }}</td>
                             <td>{{ status_dict|get_data:task.task_status }}</td>
-                            <td>{{ task.task_status }}</td>
+                            <td>
+                                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                                    <div>
+                                        <a style="text-decoration: none;"
+                                            href="{% url 'view-task' task_id=task.task_id %}" title="View">👁️</a>
+                                    </div>
+                                    <div>
+                                        <a style="text-decoration: none;"
+                                            href="{% url 'edit-task' task_id=task.task_id %}" title="Edit">🖊️</a>
+                                    </div>
+                                    <div>
+                                        <a style="text-decoration: none;"
+                                            href="{% url 'delete-task' task_id=task.task_id %}" title="Delete">🗑️</a>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

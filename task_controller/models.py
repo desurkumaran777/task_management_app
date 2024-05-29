@@ -29,3 +29,24 @@ class Task(models.Model):
 
     class Meta:
         db_table = 'task_tbl'
+
+
+class TaskPriority(models.Model):
+    PRIORITY_CHOICES = [
+        ('A', 'All'),
+        ('H', 'High'),
+        ('M', 'Medium'),
+        ('L', 'Low'),
+    ]
+
+    task_priority = models.CharField(
+        max_length=1, choices=PRIORITY_CHOICES, default='A')
+    task_user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.task_priority} - {self.task_user}"
+
+    class Meta:
+        unique_together = (('task_priority', 'task_user'),)
+        db_table = 'task_priority_tbl'
+        verbose_name_plural = 'Task Priorities'

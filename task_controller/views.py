@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
-from .forms import TaskForm
-from .models import Task
+from .forms import TaskForm, TaskPriorityForm
+from .models import Task, TaskPriority
 
 # Create your views here.
 
@@ -29,13 +29,36 @@ def add_task(request):
 
 
 def view_tasks(request):
-    tasks = Task.objects.filter(task_user=request.user)
+    if request.method == "GET":
+        tasks = Task.objects.filter(task_user=request.user)
+        form = TaskPriorityForm()
+    else:
+        if TaskPriority.objects.filter(task_user=request.user).exists():
+            selected_task_priority = TaskPriority.objects.get(task_user=request.user)
+            selected_task_priority.task_priority = request.POST['task_priority']
+            selected_task_priority.save()
+            form = TaskPriorityForm()
+            form.initial['task_priority'] = request.POST['task_priority']
+            selected_task_priority = selected_task_priority.task_priority
+        else:
+            form = TaskPriorityForm(data=request.POST)
+            if form.is_valid():
+                task_priority = form.save(commit=False)
+                if task_priority is not None:
+                    task_priority.task_user = request.user
+                    task_priority.save()
+                    selected_task_priority = request.POST['task_priority']
+
+        if selected_task_priority == 'A':
+            tasks = Task.objects.filter(task_user=request.user)
+        else:
+            tasks = Task.objects.filter(task_user=request.user, task_priority=selected_task_priority)
 
     priority_dict = {'H': 'High', 'M': 'Medium', 'L': 'Low'}
     status_dict = {'P': 'Pending', 'I': 'In Progress', 'C': 'Completed'}
 
     context = {'tasks': tasks, 'priority_dict': priority_dict,
-               'status_dict': status_dict}
+               'status_dict': status_dict, 'form': form}
     return render(request, 'task_controller/view_tasks.html', context)
 
 

@@ -3,6 +3,19 @@
 
 {% block title %}View Tasks{% endblock %}
 
+{% block style_block %}
+<style>
+    form p {
+        margin: 0;
+    }
+    form div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div>
     <div class="card mx-3">
@@ -12,6 +25,15 @@
         <div class="card-body col-12 row">
             <div class="col-1"></div>
             <div class="col-10">
+                <div class="mb-3">
+                    <form action="{% url 'view-tasks' %}" method="post" style="display: flex; justify-content: center;">
+                        {% csrf_token %}
+                        <div class="me-3">
+                            {{ form.as_p }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
                 {% if tasks|length == 0 %}
                 <div>
                     There is No Task to Show. Click <a href="{% url 'add-task' %}">here</a> to add a task.

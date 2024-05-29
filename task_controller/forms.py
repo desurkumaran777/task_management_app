@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 
-from .models import Task
+from .models import Task, TaskPriority
 
 
 class TaskForm(ModelForm):
@@ -19,3 +19,10 @@ class TaskForm(ModelForm):
             'task_priority': forms.Select(attrs={'class': 'form-control'}),
             'task_status': forms.Select(attrs={'class': 'form-control'}),
         }
+
+
+class TaskPriorityForm(ModelForm):
+
+    class Meta:
+        model = TaskPriority
+        fields = ['task_priority']

@@ -21,8 +21,10 @@ def sign_up(request):
 
 
 def sign_in(request):
+    next_url = None
     if request.method == "GET":
         form = AuthenticationForm()
+        next_url = request.GET.get('next', 'home')
     else:
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -31,13 +33,13 @@ def sign_in(request):
             user = authenticate(username=user_name, password=pass_word)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                next_url = request.POST.get('next', 'home')
+                return redirect(next_url)
 
-    context = {'form': form}
+    context = {'form': form, 'next': next_url}
     return render(request, 'user_accounts/sign_in.html', context)
 
 
 def sign_out(request):
     logout(request)
-    context = {}
-    return render(request, 'user_accounts/sign_out_success.html', context)
+    return redirect('home')

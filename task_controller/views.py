@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from .forms import TaskForm, TaskPriorityForm
 from .models import Task, TaskPriority
@@ -10,6 +11,7 @@ def home(request):
     return render(request, 'task_controller/home.html', {})
 
 
+@login_required
 def add_task(request):
     if request.method == "GET":
         form = TaskForm()
@@ -28,13 +30,15 @@ def add_task(request):
     return render(request, 'task_controller/add_task.html', context)
 
 
+@login_required
 def view_tasks(request):
     if request.method == "GET":
         tasks = Task.objects.filter(task_user=request.user)
         form = TaskPriorityForm()
     else:
         if TaskPriority.objects.filter(task_user=request.user).exists():
-            selected_task_priority = TaskPriority.objects.get(task_user=request.user)
+            selected_task_priority = get_object_or_404(
+                TaskPriority, task_user=request.user)
             selected_task_priority.task_priority = request.POST['task_priority']
             selected_task_priority.save()
             form = TaskPriorityForm()
@@ -52,7 +56,8 @@ def view_tasks(request):
         if selected_task_priority == 'A':
             tasks = Task.objects.filter(task_user=request.user)
         else:
-            tasks = Task.objects.filter(task_user=request.user, task_priority=selected_task_priority)
+            tasks = Task.objects.filter(
+                task_user=request.user, task_priority=selected_task_priority)
 
     priority_dict = {'H': 'High', 'M': 'Medium', 'L': 'Low'}
     status_dict = {'P': 'Pending', 'I': 'In Progress', 'C': 'Completed'}
@@ -62,8 +67,9 @@ def view_tasks(request):
     return render(request, 'task_controller/view_tasks.html', context)
 
 
+@login_required
 def view_task(request, task_id):
-    task = Task.objects.get(task_id=task_id)
+    task = get_object_or_404(Task, task_id=task_id)
 
     form = TaskForm()
     form.initial['task_title'] = task.task_title
@@ -81,8 +87,9 @@ def view_task(request, task_id):
     return render(request, 'task_controller/view_task.html', context)
 
 
+@login_required
 def edit_task(request, task_id):
-    task = Task.objects.get(task_id=task_id)
+    task = get_object_or_404(Task, task_id=task_id)
 
     if request.method == "GET":
         form = TaskForm()
@@ -105,7 +112,8 @@ def edit_task(request, task_id):
         return redirect('view-tasks')
 
 
+@login_required
 def delete_task(request, task_id):
-    task = Task.objects.get(task_id=task_id)
+    task = get_object_or_404(Task, task_id=task_id)
     task.delete()
     return redirect('view-tasks')

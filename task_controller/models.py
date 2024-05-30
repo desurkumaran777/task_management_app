@@ -47,6 +47,5 @@ class TaskPriority(models.Model):
         return f"{self.task_priority} - {self.task_user}"
 
     class Meta:
-        unique_together = (('task_priority', 'task_user'),)
         db_table = 'task_priority_tbl'
         verbose_name_plural = 'Task Priorities'

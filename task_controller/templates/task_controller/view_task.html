@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}View Task{% endblock %}
+
+{% block content %}
+<div>
+    <div class="card mx-3">
+        <div class="card-header">
+            View The Task
+        </div>
+        <div class="card-body col-12 row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <form method="get">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                </form>
+            </div>
+            <div class="col-1">
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    <div>
+                        <a style="text-decoration: none;" href="{% url 'edit-task' task_id=task.task_id %}"
+                            title="Edit">🖊️</a>
+                    </div>
+                    <div>
+                        <a style="text-decoration: none;" href="{% url 'delete-task' task_id=task.task_id %}"
+                            title="Delete">🗑️</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<div>
+    <div class="card mx-3">
+        <div class="card-header">
+            Sign In Your Account
+        </div>
+        <div class="card-body col-12 row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <form method="post" action="{% url 'sign-in' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
